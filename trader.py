@@ -7,6 +7,16 @@ class Trader:
         self.trading_balance = trading_balance
         self.portfolio = portfolio
         self.exchange = exchange
+        self.initial_money = self.trading_balance
+
+    def total_money(self):
+        money = self.trading_balance
+        for ticker in self.portfolio:
+            price = self.exchange.get_cur_price(ticker)
+            money += len(self.portfolio[ticker]) * price
+
+    def profit(self):
+        return self.total_money - self.initial_money
 
     def add_money(self, amount):
         if amount <= self.balance:
@@ -69,7 +79,7 @@ class Trader:
             pass
 
 
-    def strategy(self, ticker):
-        return self.exchange.get_strategy(ticker)
+    # def strategy(self, ticker):
+    #     return self.exchange.get_strategy(ticker)
 
     

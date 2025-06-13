@@ -15,6 +15,15 @@ class Exchange:
         order = SellOrder(ticker, "OFFER", quantity, price, trader.id, time, shares)
         self.stocks[ticker].add_offer(order)
 
+    def get_cur_price(self, ticker):
+        return self.stocks[ticker].cur_price
+    
+    def get_best_bid(self, ticker):
+        return self.stocks[ticker].best_bid
+    
+    def get_best_offer(self, ticker):
+        return self.stocks[ticker].best_offer
+
     def execute_match(self, buy_order, sell_order):
         if buy_order.quantity >= sell_order.quantity:
             q = sell_order.quantity
@@ -40,8 +49,8 @@ class Exchange:
         print(f"{seller.id} sold {q} shares of {sell_order.ticker} to {buyer.id} at ${sell_order.price} per share")
     
 
-    def get_strategy(self, ticker):
-        return self.stocks[ticker].analyse_last_10()
+    # def get_strategy(self, ticker):
+    #     return self.stocks[ticker].analyse_last_10()
 
         
 

@@ -3,7 +3,6 @@
 # from orderbook import OrderBook
 from collections import deque
 import numpy as np
-import random
 
 class Stock():
     def __init__(self, exchange, price, ticker):
@@ -13,6 +12,19 @@ class Stock():
         self.bids = {}
         self.offers = {}
         self.past10secs = deque([price])
+
+
+    def best_bid(self):
+        if not self.bids:
+            return None
+        return max(self.bids.keys())
+
+    def best_offer(self):
+        if not self.offers:
+            return None
+        return min(self.offers.keys())
+
+        
 
     def add_bid(self, order):
         if order.price == None:
@@ -25,6 +37,10 @@ class Stock():
                 else:
                     self.exchange.execute_match(order, self.offers[order.price][0])
                     self.offers[order.price].popleft()
+
+                if len(self.offers[order.price]) == 0:
+                    self.offers.pop(order.price)
+
             if order.quantity > 0:
                 if order.price in self.bids:
                     self.bids[order.price].append(order)
@@ -43,6 +59,10 @@ class Stock():
                 else:
                     self.exchange.execute_match(self.bids[order.price][0], order)
                     self.bids[order.price].popleft()
+                
+                if len(self.bids[order.price]) == 0:
+                    self.bids.pop(order.price)
+
             if order.quantity > 0:
                 if order.price in self.offers:
                     self.offers[order.price].append(order)
@@ -50,16 +70,16 @@ class Stock():
                     self.offers[order.price] = deque([order])
 
     
-    def analyse_last_10(self):
-        if len(self.past10secs) < 10:
-            return random.choice(("BID", "OFFER"))
-        coeffs = np.polyfit(np.linspace(1, 10, 10), self.past10secs, 1)
-        slope, intercept = coeffs
+    # def analyse_last_10(self):
+    #     if len(self.past10secs) < 10:
+    #         return random.choice(("BID", "OFFER"))
+    #     coeffs = np.polyfit(np.linspace(1, 10, 10), self.past10secs, 1)
+    #     slope, intercept = coeffs
 
-        if slope >= 0:
-            return "BID"
-        else:
-            return "OFFER"
+    #     if slope >= 0:
+    #         return "BID"
+    #     else:
+    #         return "OFFER"
 
         
 

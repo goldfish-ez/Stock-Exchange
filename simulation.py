@@ -29,8 +29,8 @@ for i in range(5):
 for j in range(50):
     for i in range(5):
         stock = random.choice([stock1, stock2, stock3])
-        order_type = stock_exchange.traders[i].strategy(stock.ticker)
-        price = random.randint(int(stock.cur_price - 2), int(stock.cur_price + 2))
+        order_type = random.choice(["BID", "OFFER"])
+        price = random.randint(int(stock.cur_price - 5), int(stock.cur_price + 5))
         quantity = random.randint(100, 400)
         timestamp = time.time()
 
@@ -54,8 +54,8 @@ for j in range(50):
     }])], ignore_index=True)
 
 
-for ticker in ["REL", "AIR", "JIO"]:
-    print(stock_exchange.stocks[ticker].past10secs)
+# for ticker in ["REL", "AIR", "JIO"]:
+#     print(stock_exchange.stocks[ticker].past10secs)
 
 # # Plot balance for each trader
 # for i in range(5):
